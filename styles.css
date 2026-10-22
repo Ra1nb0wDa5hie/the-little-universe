@@ -271,30 +271,23 @@ body { background: #100d1e; }
 }
 
 
-/* Lightweight music-reactive background circle.
-   Keep expensive blur/shadow geometry static; animate only opacity for mobile performance. */
+/* Music-reactive background circle: animate opacity rather than recalculating huge blur shadows. */
 .stage::after {
-  border-color: rgba(220, 198, 255, .20);
-  box-shadow:
-    0 0 0 28px rgba(211,190,255,.045),
-    0 0 0 58px rgba(211,190,255,.032),
-    0 0 72px rgba(163,113,255,.14),
-    0 0 110px rgba(91,133,255,.08),
-    inset 0 0 90px rgba(170,123,255,.10);
-  opacity: .30;
-  will-change: opacity;
+  border-color: rgba(220, 198, 255, calc(.10 + var(--music-energy, 0) * .62));
+  background: radial-gradient(ellipse at center, rgba(145, 104, 220, .16), rgba(125, 100, 225, .07) 43%, transparent 70%);
+  box-shadow: 0 0 0 28px rgba(211,190,255,.045), 0 0 0 58px rgba(211,190,255,.03), inset 0 0 42px rgba(170,123,255,.12);
+  opacity: calc(.34 + var(--music-energy, 0) * .66);
+  transition: opacity .07s linear, border-color .07s linear;
 }
-.stage.music-playing::after {
-  opacity: calc(.42 + var(--music-energy, 0) * .58);
+.stage.music-playing::after { opacity: calc(.52 + var(--music-energy, 0) * .48); }
+@media (max-width: 700px) {
+  .stage::after { background: radial-gradient(ellipse at center, rgba(145,104,220,.19), rgba(125,100,225,.075) 43%, transparent 70%); }
 }
-@media (max-width: 700px), (pointer: coarse) {
-  .stage::after {
-    box-shadow:
-      0 0 0 18px rgba(211,190,255,.035),
-      0 0 0 36px rgba(211,190,255,.025),
-      0 0 54px rgba(163,113,255,.10),
-      inset 0 0 50px rgba(170,123,255,.07);
-    will-change: auto;
-  }
-}
-@media (prefers-reduced-motion: reduce) { .stage::after { will-change: auto; } }
+@media (prefers-reduced-motion: reduce) { .stage::after { transition: none; } }
+
+/* Visible diagnostic for remote wish generation */
+.generation-status { display:block; margin: 0 0 12px; padding: 8px 10px; border: 1px solid #e3d8ef; border-radius: 3px; font-size: 10px; line-height: 1.55; color: #756486; background: rgba(255,255,255,.55); }
+.generation-status[hidden] { display:none; }
+.generation-status.loading { color:#6c5590; border-color:#cbb8e6; }
+.generation-status.success { color:#416c58; border-color:#b9d9c7; background:#f1faf4; }
+.generation-status.fallback { color:#8b6543; border-color:#e8d1b4; background:#fff9f1; }
