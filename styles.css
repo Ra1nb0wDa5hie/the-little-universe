@@ -271,17 +271,27 @@ body { background: #100d1e; }
 }
 
 
-/* Music-reactive background circle: animate opacity rather than recalculating huge blur shadows. */
+/* Music-reactive background circle: stronger beat response without animated blur filters. */
 .stage::after {
-  border-color: rgba(220, 198, 255, calc(.10 + var(--music-energy, 0) * .62));
-  background: radial-gradient(ellipse at center, rgba(145, 104, 220, .16), rgba(125, 100, 225, .07) 43%, transparent 70%);
-  box-shadow: 0 0 0 28px rgba(211,190,255,.045), 0 0 0 58px rgba(211,190,255,.03), inset 0 0 42px rgba(170,123,255,.12);
-  opacity: calc(.34 + var(--music-energy, 0) * .66);
-  transition: opacity .07s linear, border-color .07s linear;
+  border-color: rgba(229, 211, 255, calc(.16 + var(--music-energy, 0) * .78));
+  background: radial-gradient(ellipse at center,
+    rgba(183, 135, 255, calc(.10 + var(--music-energy, 0) * .34)),
+    rgba(104, 130, 255, calc(.06 + var(--bass-energy, 0) * .22)) 38%,
+    rgba(125, 72, 200, calc(.025 + var(--music-energy, 0) * .12)) 57%, transparent 73%);
+  box-shadow:
+    0 0 0 28px rgba(211,190,255, calc(.035 + var(--music-energy, 0) * .12)),
+    0 0 0 58px rgba(166,145,255, calc(.02 + var(--bass-energy, 0) * .10)),
+    inset 0 0 42px rgba(170,123,255, calc(.08 + var(--music-energy, 0) * .30));
+  opacity: calc(.24 + var(--music-energy, 0) * .76);
+  transition: opacity .045s linear, border-color .045s linear;
+  will-change: opacity;
 }
-.stage.music-playing::after { opacity: calc(.52 + var(--music-energy, 0) * .48); }
+.stage.music-playing::after { opacity: calc(.38 + var(--music-energy, 0) * .62); }
 @media (max-width: 700px) {
-  .stage::after { background: radial-gradient(ellipse at center, rgba(145,104,220,.19), rgba(125,100,225,.075) 43%, transparent 70%); }
+  .stage::after { background: radial-gradient(ellipse at center,
+    rgba(183,135,255,calc(.12 + var(--music-energy,0) * .38)),
+    rgba(104,130,255,calc(.07 + var(--bass-energy,0) * .24)) 38%,
+    rgba(125,72,200,calc(.03 + var(--music-energy,0) * .13)) 57%, transparent 73%); }
 }
 @media (prefers-reduced-motion: reduce) { .stage::after { transition: none; } }
 
