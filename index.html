@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171426">
+  <meta name="description" content="Небольшая цифровая вселенная, созданная специально для Камиллы.">
+  <title>The Little Universe — Chapter 14</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="wordmark" href="#home" aria-label="На главную">TLU<span>✦</span></a>
+      <div class="topbar-label">СПЕЦИАЛЬНЫЙ ВЫПУСК <span>·</span> ГЛАВА 14</div>
+      <button class="menu-button" id="menuButton" aria-label="Открыть меню" aria-expanded="false">☰</button>
+    </header>
+
+    <nav class="page-nav" id="pageNav" aria-label="Навигация по сайту">
+      <button data-go="home" class="nav-link active">Начало</button>
+      <button data-go="chapter" class="nav-link">Поздравление</button>
+      <button data-go="stage" class="nav-link">Музыка</button>
+      <button data-go="soft" class="nav-link">Твоё настроение</button>
+      <button data-go="ending" class="nav-link">На прощание</button>
+    </nav>
+
+    <main>
+      <!-- 01 / WELCOME -->
+      <section class="screen hero dark active" id="home" aria-labelledby="homeTitle">
+        <div class="hero-stars" aria-hidden="true">
+          <i class="star s1">✦</i><i class="star s2">·</i><i class="star s3">✧</i>
+          <i class="star s4">·</i><i class="star s5">✦</i><i class="star s6">✧</i>
+          <i class="star s7">·</i><i class="star s8">✦</i><i class="star s9">·</i>
+        </div>
+        <div class="hero-content">
+          <p class="eyebrow">НЕБОЛЬШОЙ ПОДАРОК — СПЕЦИАЛЬНО ДЛЯ ТЕБЯ</p>
+          <div class="orbit-mark" aria-hidden="true"><span>✦</span><b>14</b></div>
+          <p class="micro-label">ГЛАВА ЧЕТЫРНАДЦАТАЯ</p>
+          <h1 id="homeTitle">The Little<br><em>Universe</em></h1>
+          <p class="hero-subtitle">Маленькая вселенная, созданная специально для Камиллы.</p>
+          <button class="button button-light" data-go="chapter">ОТКРЫТЬ ПОДАРОК <span>↗</span></button>
+          <p class="tiny-note">ТВОЯ ИСТОРИЯ НАЧИНАЕТСЯ ЗДЕСЬ</p>
+        </div>
+        <div class="screen-number">01 <span>—</span> 05</div>
+      </section>
+
+      <!-- 02 / CHAPTER -->
+      <section class="screen light chapter" id="chapter" aria-labelledby="chapterTitle">
+        <div class="section-kicker"><span>02</span><span> ЭТА ГЛАВА — ТОЛЬКО ДЛЯ ТЕБЯ</span></div>
+        <div class="chapter-layout">
+          <div class="chapter-symbol" aria-hidden="true">
+            <div class="symbol-frame"><span class="symbol-star">✧</span><span class="symbol-number">14</span><span class="symbol-caption">НОВАЯ ГЛАВА</span></div>
+          </div>
+          <div class="chapter-copy">
+            <p class="eyebrow ink">ДОРОГАЯ КАМИЛЛА</p>
+            <h2 id="chapterTitle">Новая глава<br>начинается <em>с тебя.</em></h2>
+            <p>С днём рождения! ♡</p>
+            <p>Пусть в твоём новом году будет побольше моментов, которые хочется пересматривать в памяти, песен, которые попадают прямо в настроение, и историй, от которых невозможно оторваться.</p>
+            <p>Пусть рядом будут люди, с которыми можно быть собой, а впереди — много интересного, неожиданного и по-настоящему твоего.</p>
+            <p class="signature">С теплом — и с маленькой вселенной специально для тебя.</p>
+            <button class="button button-dark" data-go="stage">ДАЛЬШЕ <span>↗</span></button>
+          </div>
+        </div>
+        <div class="screen-number ink-number">02 <span>—</span> 05</div>
+      </section>
+
+      <!-- 03 / STAGE -->
+      <section class="screen stage dark" id="stage" aria-labelledby="stageTitle">
+        <div class="section-kicker"><span>03</span><span> ТВОЯ МУЗЫКА</span></div>
+        <div class="stage-content">
+          <p class="eyebrow">ПУСТЬ СВЕТ БУДЕТ ТВОИМ</p>
+          <h2 id="stageTitle">Почувствуй<br><em>этот ритм.</em></h2>
+          <p class="stage-intro">Немного света, ритма и любимой музыки — маленький концерт только для тебя.</p>
+          <div class="concert" id="concert" aria-label="Анимированная сцена с концертными огнями">
+            <div class="stage-beam beam-one"></div><div class="stage-beam beam-two"></div>
+            <div class="stage-beam beam-three"></div><div class="stage-beam beam-four"></div>
+            <div class="stage-glow"></div>
+            <div class="stage-floor"></div>
+            <div class="stage-caption">ТВОЙ МОМЕНТ · ТВОЯ МУЗЫКА</div>
+          </div>
+          <div class="music-player" id="musicPlayer">
+            <div class="track-art" id="trackArt" aria-hidden="true"><span>♫</span><small>THE LITTLE UNIVERSE</small></div>
+            <div class="track-details"><p class="player-overline">СЕЙЧАС ИГРАЕТ</p><h3 id="trackTitle">Добавь свою первую песню</h3><p id="trackArtist">Твой личный плейлист</p></div>
+            <div class="track-timeline"><span id="currentTime">0:00</span><input id="seekBar" type="range" min="0" max="100000" value="0" aria-label="Перемотка песни"><span id="duration">0:00</span></div>
+            <div class="player-controls">
+              <button id="prevTrack" class="player-icon" aria-label="Предыдущая песня" title="Предыдущая">|◀</button>
+              <button id="playPause" class="player-play" aria-label="Воспроизвести" title="Воспроизвести">▶</button>
+              <button id="nextTrack" class="player-icon" aria-label="Следующая песня" title="Следующая">▶|</button>
+              <button id="muteButton" class="player-icon volume-icon" aria-label="Отключить звук" title="Отключить звук">♫</button>
+              <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.75" aria-label="Громкость">
+            </div>
+            <label class="playlist-label" for="trackSelect">ВЫБРАТЬ ПЕСНЮ</label>
+            <select id="trackSelect" class="track-select"><option value="">Сначала добавь аудиофайлы в папку assets/music</option></select>
+            <p class="music-hint" id="musicHint">Добавь аудиофайлы в папку assets/music и укажи их в script.js. Этот плеер управляет настоящими файлами.</p>
+            <audio id="audioPlayer" preload="metadata" crossorigin="anonymous"></audio>
+          </div>
+          <div class="group-list" aria-label="Любимые группы">
+            <span>ATEEZ</span><i>✦</i><span>TXT</span><i>✦</i><span>ENHYPEN</span><i>✦</i><span>BOYNEXTDOOR</span>
+          </div>
+        </div>
+        <div class="screen-number">03 <span>—</span> 05</div>
+      </section>
+
+      <!-- 04 / MOOD COMPANION -->
+      <section class="screen soft light" id="soft" aria-labelledby="softTitle">
+        <div class="section-kicker"><span>04</span><span> МЕСТО, ГДЕ МОЖНО ВЫДОХНУТЬ</span></div>
+        <div class="soft-layout">
+          <div class="soft-heading">
+            <div class="little-orbit" aria-hidden="true">♡<span>✧</span></div>
+            <p class="eyebrow ink">НЕБОЛЬШОЕ НАПОМИНАНИЕ</p>
+            <h2 id="softTitle">Как ты<br><em>сегодня?</em></h2>
+            <p>Необязательно всегда быть на высоте. Выбери то, что сейчас ближе, — здесь найдётся несколько добрых слов.</p>
+            <p class="privacy-note"><span>✦</span> Это маленький помощник прямо на сайте. Твои ответы никуда не отправляются.</p>
+          </div>
+          <div class="mood-card">
+            <p class="mood-question">КАКОЕ У ТЕБЯ СЕЙЧАС НАСТРОЕНИЕ?</p>
+            <div class="mood-options" role="group" aria-label="Выбери настроение">
+              <button class="mood-option selected" data-mood="sad"><span>☁</span><span>Мне грустно</span><b>＋</b></button>
+              <button class="mood-option" data-mood="tired"><span>☾</span><span>Я устала</span><b>＋</b></button>
+              <button class="mood-option" data-mood="anxious"><span>〰</span><span>Я тревожусь</span><b>＋</b></button>
+              <button class="mood-option" data-mood="happy"><span>✧</span><span>Мне хорошо</span><b>＋</b></button>
+              <button class="mood-option" data-mood="unsure"><span>☁</span><span>Сама не знаю</span><b>＋</b></button>
+            </div>
+            <button class="button button-dark full-button" id="messageButton">ПОДОБРАТЬ ПОСЛАНИЕ <span>↗</span></button>
+            <div class="message-result" id="messageResult" aria-live="polite">
+              <span class="result-star">✧</span>
+              <p class="result-label">НЕСКОЛЬКО СЛОВ ДЛЯ ТЕБЯ</p>
+              <h3 id="messageTitle">Тебе можно не быть весёлой.</h3>
+              <p id="messageText">Даже в любимых песнях бывают тихие моменты. Не нужно немедленно становиться счастливее. Можно просто немного отдохнуть.</p>
+              <button id="anotherMessage" class="text-button">Прочитать другое послание ↗</button>
+            </div>
+          </div>
+        </div>
+        <div class="screen-number ink-number">04 <span>—</span> 05</div>
+      </section>
+
+      <!-- 05 / END -->
+      <section class="screen ending dark" id="ending" aria-labelledby="endingTitle">
+        <div class="ending-stars" aria-hidden="true"><span>✦</span><span>·</span><span>✧</span><span>·</span><span>✦</span></div>
+        <div class="ending-content">
+          <p class="eyebrow">ЭТА МАЛЕНЬКАЯ ВСЕЛЕННАЯ — ТВОЯ</p>
+          <div class="final-star" id="finalStar" role="button" tabindex="0" aria-label="Открыть последнее пожелание"><span>✧</span></div>
+          <h2 id="endingTitle">Твоя вселенная<br><em>впереди.</em></h2>
+          <p class="ending-copy">Камилла, пусть в твоей жизни всегда находится место маленьким радостям, большим мечтам и людям, рядом с которыми тепло.</p>
+          <div class="final-note" id="finalNote" hidden>И пусть даже в самый обычный день найдётся что-то, что заставит тебя улыбнуться. С днём рождения! ♡</div>
+          <button class="button button-light" id="finalButton">ОТКРЫТЬ ПОЖЕЛАНИЕ <span>✦</span></button>
+          <button class="text-button replay" data-go="home">ВЕРНУТЬСЯ В НАЧАЛО ↗</button>
+        </div>
+        <p class="end-mark">СДЕЛАНО С ТЕПЛОМ · ГЛАВА 14</p>
+        <div class="screen-number">05 <span>—</span> 05</div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>THE LITTLE UNIVERSE</span>
+      <span>СОЗДАНО СПЕЦИАЛЬНО ДЛЯ КАМИЛЛЫ ♡</span>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
