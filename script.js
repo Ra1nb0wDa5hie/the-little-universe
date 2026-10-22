@@ -109,7 +109,7 @@
       audioContext = new AudioCtx();
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 128;
-      analyser.smoothingTimeConstant = 0.62;
+      analyser.smoothingTimeConstant = 0.38;
       frequencyData = new Uint8Array(analyser.frequencyBinCount);
       sourceNode = audioContext.createMediaElementSource(audio);
       sourceNode.connect(analyser);
@@ -121,7 +121,7 @@
   function animateLights(now) {
     if (!audio.paused && analyser) {
       // Update at ~15 fps on touch devices and ~25 fps on desktop.
-      const updateInterval = window.matchMedia("(pointer: coarse)").matches ? 66 : 40;
+      const updateInterval = window.matchMedia("(pointer: coarse)").matches ? 45 : 32;
       if (now - lastLightUpdate > updateInterval) {
         if (!frequencyData || frequencyData.length !== analyser.frequencyBinCount) frequencyData = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(frequencyData);
@@ -133,9 +133,10 @@
         const bassAverage = bassSum / bassEnd;
         const midAverage = midSum / Math.max(1, midEnd - bassEnd);
         // Human ears perceive quiet energy strongly; nonlinear lift keeps the circle visibly reactive.
-        const bass = Math.min(1, Math.pow(Math.min(1, bassAverage * 2.5 + bassPeak * 0.45), 0.72));
-        const treble = Math.min(1, Math.pow(Math.min(1, midAverage * 3.0), 0.78));
-        const energy = Math.min(1, Math.pow(bass * 0.72 + treble * 0.42, 0.82));
+        const bass = Math.min(1, Math.pow(Math.min(1, bassAverage * 4.2 + bassPeak * 0.78), 0.58));
+        const treble = Math.min(1, Math.pow(Math.min(1, midAverage * 4.6), 0.62));
+        // Stronger dynamic range: quiet passages still glow, transients create visible pulses.
+        const energy = Math.min(1, Math.pow(Math.min(1, bass * 0.86 + treble * 0.58), 0.62));
         const stageSection = document.getElementById("stage");
         stageSection.style.setProperty("--music-energy", String(energy.toFixed(3)));
         stageSection.style.setProperty("--bass-energy", String(bass.toFixed(3)));
