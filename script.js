@@ -127,12 +127,11 @@
         for (let i = bassEnd; i < values.length; i++) treble += values[i];
         bass = bass / bassEnd / 255;
         treble = treble / Math.max(1, values.length - bassEnd) / 255;
-        const energy = Math.min(1, Math.sqrt(bass * 0.75 + treble * 0.25) * 1.25);
-        bass = Math.min(1, Math.sqrt(bass) * 1.15);
-        treble = Math.min(1, Math.sqrt(treble) * 1.10);
-        musicPlayer.style.setProperty("--music-energy", String(energy.toFixed(3)));
-        musicPlayer.style.setProperty("--bass-energy", String(bass.toFixed(3)));
-        musicPlayer.style.setProperty("--treble-energy", String(treble.toFixed(3)));
+        const energy = bass * 0.75 + treble * 0.25;
+        const stageSection = document.getElementById("stage");
+        stageSection.style.setProperty("--music-energy", String(energy.toFixed(3)));
+        stageSection.style.setProperty("--bass-energy", String(bass.toFixed(3)));
+        stageSection.style.setProperty("--treble-energy", String(treble.toFixed(3)));
         lastLightUpdate = now;
       }
       animationFrame = requestAnimationFrame(animateLights);
@@ -148,6 +147,11 @@
     musicPlayer.style.setProperty("--music-energy", "0");
     musicPlayer.style.setProperty("--bass-energy", "0");
     musicPlayer.style.setProperty("--treble-energy", "0");
+    const stageSection = document.getElementById("stage");
+    stageSection.classList.remove("music-playing");
+    stageSection.style.setProperty("--music-energy", "0");
+    stageSection.style.setProperty("--bass-energy", "0");
+    stageSection.style.setProperty("--treble-energy", "0");
   }
 
   async function playCurrentTrack() {
@@ -159,6 +163,7 @@
       playPause.textContent = "Ⅱ";
       playPause.setAttribute("aria-label", "Пауза");
       musicPlayer.classList.add("music-playing");
+      document.getElementById("stage").classList.add("music-playing");
       musicHint.textContent = "Музыка играет.";
 
       try {
