@@ -323,7 +323,7 @@
       sentence = sentence.replace(/^['"“”]+|['"“”]+$/g, "").replace(/^Пожелание:\s*/i, "").trim();
       if (sentence.length < 35 || sentence.length > 650 || /не могу|как языковая модель|я не знаю/i.test(sentence)) sentence = "";
     } catch (error) {
-      sentence = "сервис не отвечает";
+      sentence = "";
     }
     if (!sentence || sentence === previousGenerated) sentence = makeLocalFallback();
     previousGenerated = sentence;
