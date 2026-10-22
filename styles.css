@@ -271,16 +271,30 @@ body { background: #100d1e; }
 }
 
 
-/* Alternative: music-reactive glow on the large background circle */
+/* Lightweight music-reactive background circle.
+   Keep expensive blur/shadow geometry static; animate only opacity for mobile performance. */
 .stage::after {
-  border-color: rgba(220, 198, 255, calc(.07 + var(--music-energy, 0) * .58));
+  border-color: rgba(220, 198, 255, .20);
   box-shadow:
-    0 0 0 28px rgba(211,190,255, calc(.018 + var(--music-energy, 0) * .11)),
-    0 0 0 58px rgba(211,190,255, calc(.014 + var(--bass-energy, 0) * .085)),
-    0 0 calc(24px + var(--music-energy, 0) * 100px) rgba(163, 113, 255, calc(.04 + var(--music-energy, 0) * .48)),
-    0 0 calc(50px + var(--bass-energy, 0) * 140px) rgba(91, 133, 255, calc(.03 + var(--bass-energy, 0) * .30)),
-    inset 0 0 calc(70px + var(--music-energy, 0) * 110px) rgba(170, 123, 255, calc(.06 + var(--music-energy, 0) * .35));
-  transition: border-color .09s linear, box-shadow .09s linear;
+    0 0 0 28px rgba(211,190,255,.045),
+    0 0 0 58px rgba(211,190,255,.032),
+    0 0 72px rgba(163,113,255,.14),
+    0 0 110px rgba(91,133,255,.08),
+    inset 0 0 90px rgba(170,123,255,.10);
+  opacity: .30;
+  will-change: opacity;
 }
-.stage.music-playing::after { filter: brightness(calc(1 + var(--music-energy, 0) * .8)); }
-@media (prefers-reduced-motion: reduce) { .stage::after { transition: none; } }
+.stage.music-playing::after {
+  opacity: calc(.42 + var(--music-energy, 0) * .58);
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .stage::after {
+    box-shadow:
+      0 0 0 18px rgba(211,190,255,.035),
+      0 0 0 36px rgba(211,190,255,.025),
+      0 0 54px rgba(163,113,255,.10),
+      inset 0 0 50px rgba(170,123,255,.07);
+    will-change: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) { .stage::after { will-change: auto; } }
