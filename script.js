@@ -61,6 +61,8 @@
   let sourceNode = null;
   let animationFrame = 0;
   let lastLightUpdate = 0;
+  let frequencyData = null;
+  const lightUpdateInterval = window.matchMedia("(max-width: 700px), (pointer: coarse)").matches ? 140 : 85;
 
   function formatTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
@@ -107,8 +109,10 @@
     if (!audioContext) {
       audioContext = new AudioCtx();
       analyser = audioContext.createAnalyser();
-      analyser.fftSize = 128;
-      analyser.smoothingTimeConstant = 0.78;
+      // Smaller FFT + a reusable buffer reduce CPU and garbage collection on phones.
+      analyser.fftSize = 64;
+      analyser.smoothingTimeConstant = 0.72;
+      frequencyData = new Uint8Array(analyser.frequencyBinCount);
       sourceNode = audioContext.createMediaElementSource(audio);
       sourceNode.connect(analyser);
       analyser.connect(audioContext.destination);
@@ -118,8 +122,9 @@
 
   function animateLights(now) {
     if (!audio.paused && analyser) {
-      if (now - lastLightUpdate > 70) {
-        const values = new Uint8Array(analyser.frequencyBinCount);
+      if (now - lastLightUpdate > lightUpdateInterval) {
+        if (!frequencyData || frequencyData.length !== analyser.frequencyBinCount) frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        const values = frequencyData;
         analyser.getByteFrequencyData(values);
         let bass = 0, treble = 0;
         const bassEnd = Math.max(1, Math.floor(values.length * 0.22));
@@ -306,9 +311,11 @@
     messageText.textContent = "Это может занять несколько секунд.";
     let sentence = "";
     try {
-      const prompt = `Напиши одно красивое, естественное и грамотное пожелание на русском языке для 14-летней девушки по имени Камилла. Настроение: ${moodPrompts[selectedMood]}. 2–4 предложения, дружеский тёплый тон, без романтического подтекста, без пафоса, без клише и чрезмерной драматичности. Не говори, что знаешь её жизнь. Не добавляй заголовок, кавычки и эмодзи. Каждый раз формулируй мысль по-новому. Только текст пожелания.`;
+      const styles = ["образно и нежно, через небольшую метафору", "просто и по-дружески, словно сообщение от близкого друга", "с конкретной маленькой идеей, которую можно попробовать прямо сейчас", "спокойно и искренне, без красивостей ради красивостей", "с необычным, но естественным образом и мягким финалом"];
+      const style = styles[Math.floor(Math.random() * styles.length)];
+      const prompt = `Напиши оригинальное короткое послание на русском языке для Камиллы, которой 14 лет. Контекст настроения: ${moodPrompts[selectedMood]}. Стиль именно этого послания: ${style}. Длина 2–4 предложения. Пусть звучит естественно, грамотно и по-человечески, как от доброго друга, не как цитата из открытки. Не повторяй распространённые клише вроде «всё будет хорошо», «ты сильнее, чем думаешь» и «улыбайся чаще». Не выдумывай факты о её жизни, не поучай, не обесценивай чувства и не обещай, что проблемы исчезнут. Без романтического подтекста, пафоса, заголовка, кавычек и эмодзи. Не начинай каждый раз с «Пусть». Только текст послания.`;
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12000);
+      const timeout = setTimeout(() => controller.abort(), 9000);
       try {
         const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&seed=${Math.floor(Math.random()*1000000000)}`, { signal: controller.signal, headers: { "Accept": "text/plain" } });
         if (response.ok) sentence = (await response.text()).trim();
