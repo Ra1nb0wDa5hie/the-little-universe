@@ -71,10 +71,17 @@
           <p class="eyebrow">ПУСТЬ СВЕТ БУДЕТ ТВОИМ</p>
           <h2 id="stageTitle">Почувствуй<br><em>этот ритм.</em></h2>
           <p class="stage-intro">Немного света, ритма и любимой музыки — маленький концерт только для тебя.</p>
+          <div class="concert" id="concert" aria-label="Анимированная сцена с концертными огнями">
+            <div class="stage-beam beam-one"></div><div class="stage-beam beam-two"></div>
+            <div class="stage-beam beam-three"></div><div class="stage-beam beam-four"></div>
+            <div class="stage-glow"></div>
+            <div class="stage-floor"></div>
+            <div class="stage-caption">ТВОЙ МОМЕНТ · ТВОЯ МУЗЫКА</div>
+          </div>
           <div class="music-player" id="musicPlayer">
             <div class="track-art" id="trackArt" aria-hidden="true"><span>♫</span><small>THE LITTLE UNIVERSE</small></div>
             <div class="track-details"><p class="player-overline">СЕЙЧАС ИГРАЕТ</p><h3 id="trackTitle">Добавь свою первую песню</h3><p id="trackArtist">Твой личный плейлист</p></div>
-            <div class="track-timeline"><span id="currentTime">0:00</span><input id="seekBar" type="range" min="0" max="1000" value="0" aria-label="Перемотка песни"><span id="duration">0:00</span></div>
+            <div class="track-timeline"><span id="currentTime">0:00</span><input id="seekBar" type="range" min="0" max="100000" value="0" aria-label="Перемотка песни"><span id="duration">0:00</span></div>
             <div class="player-controls">
               <button id="prevTrack" class="player-icon" aria-label="Предыдущая песня" title="Предыдущая">|◀</button>
               <button id="playPause" class="player-play" aria-label="Воспроизвести" title="Воспроизвести">▶</button>
