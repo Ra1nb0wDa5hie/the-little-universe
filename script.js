@@ -127,7 +127,9 @@
         for (let i = bassEnd; i < values.length; i++) treble += values[i];
         bass = bass / bassEnd / 255;
         treble = treble / Math.max(1, values.length - bassEnd) / 255;
-        const energy = bass * 0.75 + treble * 0.25;
+        const energy = Math.min(1, Math.sqrt(bass * 0.75 + treble * 0.25) * 1.25);
+        bass = Math.min(1, Math.sqrt(bass) * 1.15);
+        treble = Math.min(1, Math.sqrt(treble) * 1.10);
         musicPlayer.style.setProperty("--music-energy", String(energy.toFixed(3)));
         musicPlayer.style.setProperty("--bass-energy", String(bass.toFixed(3)));
         musicPlayer.style.setProperty("--treble-energy", String(treble.toFixed(3)));
