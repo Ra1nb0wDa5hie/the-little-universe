@@ -62,7 +62,6 @@
   let animationFrame = 0;
   let lastLightUpdate = 0;
   let frequencyData = null;
-  const lightUpdateInterval = window.matchMedia("(max-width: 700px), (pointer: coarse)").matches ? 140 : 85;
 
   function formatTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
@@ -109,9 +108,8 @@
     if (!audioContext) {
       audioContext = new AudioCtx();
       analyser = audioContext.createAnalyser();
-      // Smaller FFT + a reusable buffer reduce CPU and garbage collection on phones.
-      analyser.fftSize = 64;
-      analyser.smoothingTimeConstant = 0.72;
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.62;
       frequencyData = new Uint8Array(analyser.frequencyBinCount);
       sourceNode = audioContext.createMediaElementSource(audio);
       sourceNode.connect(analyser);
@@ -122,17 +120,22 @@
 
   function animateLights(now) {
     if (!audio.paused && analyser) {
-      if (now - lastLightUpdate > lightUpdateInterval) {
+      // Update at ~15 fps on touch devices and ~25 fps on desktop.
+      const updateInterval = window.matchMedia("(pointer: coarse)").matches ? 66 : 40;
+      if (now - lastLightUpdate > updateInterval) {
         if (!frequencyData || frequencyData.length !== analyser.frequencyBinCount) frequencyData = new Uint8Array(analyser.frequencyBinCount);
-        const values = frequencyData;
-        analyser.getByteFrequencyData(values);
-        let bass = 0, treble = 0;
-        const bassEnd = Math.max(1, Math.floor(values.length * 0.22));
-        for (let i = 0; i < bassEnd; i++) bass += values[i];
-        for (let i = bassEnd; i < values.length; i++) treble += values[i];
-        bass = bass / bassEnd / 255;
-        treble = treble / Math.max(1, values.length - bassEnd) / 255;
-        const energy = bass * 0.75 + treble * 0.25;
+        analyser.getByteFrequencyData(frequencyData);
+        let bassSum = 0, midSum = 0, bassPeak = 0;
+        const bassEnd = Math.max(1, Math.floor(frequencyData.length * 0.28));
+        const midEnd = Math.max(bassEnd + 1, Math.floor(frequencyData.length * 0.72));
+        for (let i = 0; i < bassEnd; i++) { const v = frequencyData[i] / 255; bassSum += v; if (v > bassPeak) bassPeak = v; }
+        for (let i = bassEnd; i < midEnd; i++) midSum += frequencyData[i] / 255;
+        const bassAverage = bassSum / bassEnd;
+        const midAverage = midSum / Math.max(1, midEnd - bassEnd);
+        // Human ears perceive quiet energy strongly; nonlinear lift keeps the circle visibly reactive.
+        const bass = Math.min(1, Math.pow(Math.min(1, bassAverage * 2.5 + bassPeak * 0.45), 0.72));
+        const treble = Math.min(1, Math.pow(Math.min(1, midAverage * 3.0), 0.78));
+        const energy = Math.min(1, Math.pow(bass * 0.72 + treble * 0.42, 0.82));
         const stageSection = document.getElementById("stage");
         stageSection.style.setProperty("--music-energy", String(energy.toFixed(3)));
         stageSection.style.setProperty("--bass-energy", String(bass.toFixed(3)));
@@ -273,6 +276,7 @@
   const messageResult = document.getElementById("messageResult");
   const messageTitle = document.getElementById("messageTitle");
   const messageText = document.getElementById("messageText");
+  const generationStatus = document.getElementById("generationStatus");
   let selectedMood = "sad";
   let previousGenerated = "";
   function pickDifferent(items, previous) {
@@ -300,35 +304,70 @@
     return sentence;
   }
 
+  function setGenerationStatus(kind, text) {
+    if (!generationStatus) return;
+    generationStatus.className = `generation-status ${kind}`;
+    generationStatus.textContent = text;
+    generationStatus.hidden = false;
+  }
+
   async function chooseMessage() {
     if (generationBusy) return;
     generationBusy = true;
     messageButton.disabled = true;
     anotherMessage.disabled = true;
-    messageButton.textContent = "СОЧИНЯЮ ПОСЛАНИЕ…";
+    messageButton.textContent = "СВЯЗЫВАЮСЬ С НЕЙРОСЕТЬЮ…";
     messageResult.classList.add("visible");
-    messageTitle.textContent = "Подбираю слова именно для этого момента…";
-    messageText.textContent = "Это может занять несколько секунд.";
+    messageTitle.textContent = "Пробую придумать что-то новое…";
+    messageText.textContent = "Отправляю запрос внешнему сервису. Обычно это занимает несколько секунд.";
+    setGenerationStatus("loading", "◌  Запрос отправлен — жду ответ нейросети…");
+
     let sentence = "";
+    let serviceState = "fallback";
+    let failureReason = "Сервис не ответил вовремя или вернул ошибку.";
+    const prompt = `Напиши одно оригинальное короткое послание на русском языке для 14-летней девушки по имени Камилла. Настроение: ${moodPrompts[selectedMood]}. Напиши 2–4 естественных предложения, как внимательный друг, который умеет подбирать точные слова. Избегай клише, общих лозунгов и повторяющихся зачинов; используй одну конкретную, ненавязчивую образную деталь, если она уместна. Не выдумывай факты о её жизни, не поучай и не обесценивай чувства. Без романтического подтекста, пафоса, заголовка, кавычек и эмодзи. Не начинай с «Пусть», «Помни», «Ты сильная» или «Всё будет хорошо». Только текст послания.`;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 18000);
     try {
-      const styles = ["образно и нежно, через небольшую метафору", "просто и по-дружески, словно сообщение от близкого друга", "с конкретной маленькой идеей, которую можно попробовать прямо сейчас", "спокойно и искренне, без красивостей ради красивостей", "с необычным, но естественным образом и мягким финалом"];
-      const style = styles[Math.floor(Math.random() * styles.length)];
-      const prompt = `Напиши оригинальное короткое послание на русском языке для Камиллы, которой 14 лет. Контекст настроения: ${moodPrompts[selectedMood]}. Стиль именно этого послания: ${style}. Длина 2–4 предложения. Пусть звучит естественно, грамотно и по-человечески, как от доброго друга, не как цитата из открытки. Не повторяй распространённые клише вроде «всё будет хорошо», «ты сильнее, чем думаешь» и «улыбайся чаще». Не выдумывай факты о её жизни, не поучай, не обесценивай чувства и не обещай, что проблемы исчезнут. Без романтического подтекста, пафоса, заголовка, кавычек и эмодзи. Не начинай каждый раз с «Пусть». Только текст послания.`;
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 9000);
-      try {
-        const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&seed=${Math.floor(Math.random()*1000000000)}`, { signal: controller.signal, headers: { "Accept": "text/plain" } });
-        if (response.ok) sentence = (await response.text()).trim();
-      } finally { clearTimeout(timeout); }
-      sentence = sentence.replace(/^['"“”]+|['"“”]+$/g, "").replace(/^Пожелание:\s*/i, "").trim();
-      if (sentence.length < 35 || sentence.length > 650 || /не могу|как языковая модель|я не знаю/i.test(sentence)) sentence = "";
+      const seed = Math.floor(Math.random() * 2147483647);
+      const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&seed=${seed}`;
+      setGenerationStatus("loading", "◌  Нейросеть обрабатывает запрос…");
+      const response = await fetch(url, { signal: controller.signal, headers: { "Accept": "text/plain" }, cache: "no-store" });
+      if (!response.ok) {
+        failureReason = `Сервис вернул ошибку HTTP ${response.status}.`;
+      } else {
+        const raw = await response.text();
+        sentence = raw.trim().replace(/^['"“”]+|['"“”]+$/g, "").replace(/^(пожелание|послание):\s*/i, "").trim();
+        if (sentence.length >= 35 && sentence.length <= 650 && !/не могу|как языковая модель|я не знаю/i.test(sentence)) {
+          serviceState = "success";
+        } else {
+          sentence = "";
+          failureReason = "Ответ пришёл, но его качество не прошло проверку — использую запасной вариант.";
+        }
+      }
     } catch (error) {
-      sentence = "";
+      failureReason = error && error.name === "AbortError"
+        ? "Нейросеть не ответила за 18 секунд — использую запасной вариант."
+        : "Не удалось связаться с сервисом. Возможно, он временно недоступен или запрос заблокирован.";
+      console.warn("Wish generation service failed:", error);
+    } finally {
+      clearTimeout(timeout);
     }
-    if (!sentence || sentence === previousGenerated) sentence = makeLocalFallback();
+
+    if (serviceState === "success" && sentence === previousGenerated) {
+      failureReason = "Сервис повторил предыдущее сообщение — выбираю другой вариант.";
+      sentence = "";
+      serviceState = "fallback";
+    }
+    if (!sentence) sentence = makeLocalFallback();
     previousGenerated = sentence;
     messageTitle.textContent = pickDifferent(moodTitles[selectedMood], messageTitle.textContent);
     messageText.textContent = sentence;
+    if (serviceState === "success") {
+      setGenerationStatus("success", "✦  Ответ получен от нейросети");
+    } else {
+      setGenerationStatus("fallback", `◇  Показано запасное пожелание. ${failureReason}`);
+    }
     messageButton.disabled = false;
     anotherMessage.disabled = false;
     messageButton.innerHTML = 'ПОДОБРАТЬ ПОСЛАНИЕ <span>↗</span>';
