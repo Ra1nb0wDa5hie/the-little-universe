@@ -52,7 +52,7 @@
   // Replace these examples with the songs you are allowed to use.
   const playlist = [
     { title: "Adrenaline", artist: "ATEEZ", src: "assets/music/Ateez - Adrenaline.mp3", cover: "" },
-    { title: "Песня №2 — добавь файл", artist: "Исполнитель", src: "assets/music/track-02.mp3", cover: "" },
+    { title: "In Your Fantasy", artist: "ATEEZ", src: "assets/music/Ateez - In Your Fantasy.mp3", cover: "" },
     { title: "Песня №3 — добавь файл", artist: "Исполнитель", src: "assets/music/track-03.mp3", cover: "" }
   ];
   let currentTrack = -1;
