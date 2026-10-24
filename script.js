@@ -49,12 +49,81 @@
   const currentTimeLabel = document.getElementById("currentTime");
   const durationLabel = document.getElementById("duration");
 
-  // Replace these examples with the songs you are allowed to use.
-  const playlist = [
-    { title: "Adrenaline", artist: "ATEEZ", src: "assets/music/Ateez - Adrenaline.mp3", cover: "" },
-    { title: "In Your Fantasy", artist: "ATEEZ", src: "assets/music/Ateez - In Your Fantasy.mp3", cover: "" },
-    { title: "Песня №3 — добавь файл", artist: "Исполнитель", src: "assets/music/track-03.mp3", cover: "" }
-  ];
+
+const playlist = [
+    // 1. ATEEZ
+    { title: "12 Midnight", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - 12 Midnight.mp3", cover: "" },
+    { title: "Adrenaline", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Adrenaline.mp3", cover: "" },
+    { title: "Answer", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Answer.mp3", cover: "" },
+    { title: "ARRIBA", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - ARRIBA.mp3", cover: "" },
+    { title: "Ash", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Ash.mp3", cover: "" },
+    { title: "BAD", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - BAD.mp3", cover: "" },
+    { title: "BOUNCY", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - BOUNCY.mp3", cover: "" },
+    { title: "Deja Vu", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Deja Vu.mp3", cover: "" },
+    { title: "Fallin'", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Fallin'.mp3", cover: "" },
+    { title: "HALAZIA", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - HALAZIA.mp3", cover: "" },
+    { title: "Ice On My Teeth", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Ice On My Teeth.mp3", cover: "" },
+    { title: "In Your Fantasy", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - In Your Fantasy.mp3", cover: "" },
+    { title: "Lemon Drop", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Lemon Drop.mp3", cover: "" },
+    { title: "Wonderland", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - Wonderland.mp3", cover: "" },
+    { title: "WORK", artist: "ATEEZ", src: "assets/music/Ateez/Ateez - WORK.mp3", cover: "" },
+
+    // 2. Tomorrow X Together
+    { title: "9 And Three Quarters", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - 9 And Three Quarters.mp3", cover: "" },
+    { title: "Angel Or Devil", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Angel Or Devil.mp3", cover: "" },
+    { title: "Anti-Romantic", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Anti-Romantic.mp3", cover: "" },
+    { title: "Back for More", artist: "Tomorrow X Together ft. Anitta", src: "assets/music/TXT/Tomorrow X Together - Back for More.mp3", cover: "" },
+    { title: "Beautiful Strangers", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Beautiful Strangers.mp3", cover: "" },
+    { title: "Bed of Thorns", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Bed of Thorns.mp3", cover: "" },
+    { title: "Bird of Night", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Bird of Night.mp3", cover: "" },
+    { title: "Blue Hour", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Blue Hour.mp3", cover: "" },
+    { title: "CROWN", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - CROWN.mp3", cover: "" },
+    { title: "Dream of Mine", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Dream of Mine.mp3", cover: "" },
+    { title: "LO$ER=LO♡ER", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - LO$ER=LO♡ER.mp3", cover: "" },
+    { title: "Nice to Meet Ya", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Nice to Meet Ya.mp3", cover: "" },
+    { title: "Silence", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Silence.mp3", cover: "" },
+    { title: "So What", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - So What.mp3", cover: "" },
+    { title: "Sugar Rush Ride", artist: "Tomorrow X Together", src: "assets/music/TXT/Tomorrow X Together - Sugar Rush Ride.mp3", cover: "" },
+
+    // 3. ENHYPEN
+    { title: "Always", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Always.mp3", cover: "" },
+    { title: "Bite Me", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Bite Me.mp3", cover: "" },
+    { title: "Blessed-Cursed", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Blessed-Cursed.mp3", cover: "" },
+    { title: "Brought The Heat Back", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Brought The Heat Back.mp3", cover: "" },
+    { title: "Chaconne", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Chaconne.mp3", cover: "" },
+    { title: "Drunk-Dazed", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Drunk-Dazed.mp3", cover: "" },
+    { title: "FEVER", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - FEVER.mp3", cover: "" },
+    { title: "Moonstruck", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Moonstruck.mp3", cover: "" },
+    { title: "Polaroid Love", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Polaroid Love.mp3", cover: "" },
+    { title: "Sacrifice (Eat Me Up)", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Sacrifice (Eat Me Up).mp3", cover: "" },
+    { title: "SHOUT OUT", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - SHOUT OUT.mp3", cover: "" },
+    { title: "Sweet Venom", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Sweet Venom.mp3", cover: "" },
+    { title: "Tamed-Dashed", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Tamed-Dashed.mp3", cover: "" },
+    { title: "Teeth", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - Teeth.mp3", cover: "" },
+    { title: "XO (Only If You Say Yes)", artist: "ENHYPEN", src: "assets/music/Enhypen/ENHYPEN - XO (Only If You Say Yes).mp3", cover: "" },
+
+    // 4. BOYNEXTDOOR
+    { title: "123-78", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - 123-78.mp3", cover: "" },
+    { title: "ABCDLOVE", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - ABCDLOVE.mp3", cover: "" },
+    { title: "Amnesia", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Amnesia.mp3", cover: "" },
+    { title: "But I Like You", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - But I Like You.mp3", cover: "" },
+    { title: "But Sometimes", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - But Sometimes.mp3", cover: "" },
+    { title: "Crying", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Crying.mp3", cover: "" },
+    { title: "Dangerous", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Dangerous.mp3", cover: "" },
+    { title: "Earth, Wind & Fire", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Earth, Wind & Fire.mp3", cover: "" },
+    { title: "Hollywood Action", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Hollywood Action.mp3", cover: "" },
+    { title: "IF I SAY, I LOVE YOU", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - IF I SAY, I LOVE YOU.mp3", cover: "" },
+    { title: "Nice Guy", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Nice Guy.mp3", cover: "" },
+    { title: "One and Only", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - One and Only.mp3", cover: "" },
+    { title: "OUR", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - OUR.mp3", cover: "" },
+    { title: "Serenade", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - Serenade.mp3", cover: "" },
+    { title: "So let's go see the stars", artist: "BOYNEXTDOOR", src: "assets/music/BOYNEXTDOOR/BOYNEXTDOOR - So let's go see the stars.mp3", cover: "" },
+
+    // 5. Other
+    { title: "WYN?", artist: "Haechan", src: "assets/music/Other/Haechan - WYN.mp3", cover: "" },
+    { title: "SPAGHETTI", artist: "LE SSERAFIM, j-hope", src: "assets/music/Other/LE SSERAFIM, j-hope - SPAGHETTI.mp3", cover: "" }
+];
+
   let currentTrack = -1;
   let audioContext = null;
   let analyser = null;
